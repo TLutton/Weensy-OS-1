@@ -227,8 +227,8 @@ do_fork(process_t *parent)
 
 	// Find an empty process descriptor
 	for(i = 1; i != NPROCS; ++i) {
-		if(miniproc[i].p_state == P_EMPTY) {
-			avail_proc_desc = &(miniproc[i]);
+		if(proc_array[i].p_state == P_EMPTY) {
+			avail_proc_desc = &(proc_array[i]);
 			break;
 		}
 	}
@@ -257,14 +257,9 @@ do_fork(process_t *parent)
 	//                should arrange this.
 	//   * ???????    There is one other difference.  What is it?  (Hint:
 	//                What should sys_fork() return to the child process?)
-	//				  ANS: sys_fork returns 0 when a child process. So, eax must be 0
+	//	          ANS: sys_fork returns 0 when a child process. So, eax must be 0
 	// You need to set one other process descriptor field as well.
 	// Finally, return the child's process ID to the parent.
-	
-	
-	
-
-	return -1;
 }
 
 static void
@@ -324,11 +319,11 @@ copy_stack(process_t *dest, process_t *src)
 
 	src_stack_top = PROC1_STACK_ADDR + (src->p_pid * PROC_STACK_SIZE);
 	src_stack_bottom = src->p_registers.reg_esp;
-	dest_stack_top = PROC1_STACK_ADDR + (src->p_pid * PROC_STACK_SIZE);
+	dest_stack_top = PROC1_STACK_ADDR + (dest->p_pid * PROC_STACK_SIZE);
 	dest_stack_bottom = dest_stack_top - (src_stack_top - src_stack_bottom);
 	// YOUR CODE HERE: memcpy the stack and set dest->p_registers.reg_esp
 	
-	memcpy(dest_stack_top, src_stack_top, (dest_stack_top - dest_stack_bottom));
+	memcpy((void*)dest_stack_top, (void*)src_stack_top, (dest_stack_top - dest_stack_bottom));
 	dest->p_registers.reg_esp = dest_stack_bottom;
 }
 
