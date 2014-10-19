@@ -1,4 +1,4 @@
-Name:
+Name: Thomas Lutton
 UCLA ID:
 
 Collaborators:
@@ -7,7 +7,10 @@ Collaborators:
 
 Response to Exercise 1:
 
-
+Yes. It should still work because schedule context switches and searches for a 
+runnable program to run.  If another program is run before the current 
+application, its registers will be saved and will still be able to execute 
+when the context is switched back to it. 
 
 Anything else you'd like us to know:
 

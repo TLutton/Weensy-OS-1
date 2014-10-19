@@ -222,9 +222,29 @@ static void copy_stack(process_t *dest, process_t *src);
 static pid_t
 do_fork(process_t *parent)
 {
-	// YOUR CODE HERE!
+	int i;
+	process_t *avail_proc_desc;
+
+	// Find an empty process descriptor
+	for(i = 1; i != NPROCS; ++i) {
+		if(miniproc[i].p_state == P_EMPTY) {
+			avail_proc_desc = &(miniproc[i]);
+			break;
+		}
+	}
+	if(i == NPROCS)
+		return -1; // No empty process descriptor :(
+	
+	// Init process descriptor as running process (copy parent regs and stack)
+	avail_proc_desc->p_registers = parent->p_registers;
+	copy_stack(avail_proc_desc, parent);
+	avail_proc_desc->p_state = P_RUNNABLE;
+	
+	avail_proc_desc->p_registers.reg_eax = 0;
+	return avail_proc_desc->p_pid;
+		
 	// First, find an empty process descriptor.  If there is no empty
-	//   process descriptor, return -1.  Remember not to use proc_array[0].
+	//   process descriptor, return -1.  Remember not to use proc_array[0].	
 	// Then, initialize that process descriptor as a running process
 	//   by copying the parent process's registers and stack into the
 	//   child.  Copying the registers is simple: they are stored in the
@@ -237,8 +257,12 @@ do_fork(process_t *parent)
 	//                should arrange this.
 	//   * ???????    There is one other difference.  What is it?  (Hint:
 	//                What should sys_fork() return to the child process?)
+	//				  ANS: sys_fork returns 0 when a child process. So, eax must be 0
 	// You need to set one other process descriptor field as well.
 	// Finally, return the child's process ID to the parent.
+	
+	
+	
 
 	return -1;
 }
