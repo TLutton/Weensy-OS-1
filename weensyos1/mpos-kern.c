@@ -355,5 +355,7 @@ schedule(void)
 		pid = (pid + 1) % NPROCS;
 		if (proc_array[pid].p_state == P_RUNNABLE)
 			run(&proc_array[pid]);
+		else if(proc_array[pid].p_state == P_ZOMBIE)
+			proc_array[pid].p_state = P_EMPTY;
 	}
 }
