@@ -194,7 +194,6 @@ interrupt(registers_t *reg)
 			current->p_registers.reg_eax = -1;
 		else if (proc_array[p].p_state == P_ZOMBIE) {
 			current->p_registers.reg_eax = proc_array[p].p_exit_status;
-			proc_array[p].p_state = P_EMPTY;
 		} else {  // process p is blocking current's execution
 		   current->p_state = P_BLOCKED;
 		   proc_array[p].p_waiting_pid = current->p_pid;
