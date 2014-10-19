@@ -76,6 +76,7 @@ start(void)
 	for (i = 0; i < NPROCS; i++) {
 		proc_array[i].p_pid = i;
 		proc_array[i].p_state = P_EMPTY;
+		proc_array[i].p_waiting_pid = -1; // Nothing waiting
 	}
 
 	// The first process has process ID 1.
@@ -173,6 +174,7 @@ interrupt(registers_t *reg)
 		if(current->p_waiting_pid != -1)
 		{
 		proc_array[current->p_waiting_pid].p_state = P_RUNNABLE; // parent process is now unblocked
+		proc_array[current->p_waiting_pid].p_registers.reg_eax = current->p_exit_status;
 		current->p_waiting_pid = -1;  // no waiting process
 		}
 		schedule();
