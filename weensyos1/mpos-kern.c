@@ -170,7 +170,7 @@ interrupt(registers_t *reg)
 		// for this register out of 'current->p_registers'.
 		current->p_state = P_ZOMBIE;
 		current->p_exit_status = current->p_registers.reg_eax;
-		proc_array[current->p_waiting_pid].p_status = P_RUNNABLE; // parent process is now unblocked
+		proc_array[current->p_waiting_pid].p_state = P_RUNNABLE; // parent process is now unblocked
 		schedule();
 
 	case INT_SYS_WAIT: {
@@ -196,8 +196,8 @@ interrupt(registers_t *reg)
 		   change current->p_status to blocked.
 		   
 		   */
-		   current->p_status = P_BLOCKED;
-		   proc_array[p]->p_waiting_pid = current->p_pid;
+		   current->p_state = P_BLOCKED;
+		   proc_array[p].p_waiting_pid = current->p_pid;
 		   
 		//	current->p_registers.reg_eax = WAIT_TRYAGAIN;
 		}
