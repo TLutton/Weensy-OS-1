@@ -322,12 +322,14 @@ copy_stack(process_t *dest, process_t *src)
 
 	// YOUR CODE HERE!
 
-	src_stack_top = 0 /* YOUR CODE HERE */;
+	src_stack_top = PROC1_STACK_ADDR + (src->p_pid * PROC_STACK_SIZE);
 	src_stack_bottom = src->p_registers.reg_esp;
-	dest_stack_top = 0 /* YOUR CODE HERE */;
-	dest_stack_bottom = 0 /* YOUR CODE HERE: calculate based on the
-				 other variables */;
+	dest_stack_top = PROC1_STACK_ADDR + (src->p_pid * PROC_STACK_SIZE);
+	dest_stack_bottom = dest_stack_top - (src_stack_top - src_stack_bottom);
 	// YOUR CODE HERE: memcpy the stack and set dest->p_registers.reg_esp
+	
+	memcpy(dest_stack_top, src_stack_top, (dest_stack_top - dest_stack_bottom));
+	dest->p_registers.reg_esp = dest_stack_bottom;
 }
 
 
