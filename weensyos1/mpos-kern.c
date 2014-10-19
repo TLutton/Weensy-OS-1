@@ -170,6 +170,7 @@ interrupt(registers_t *reg)
 		// for this register out of 'current->p_registers'.
 		current->p_state = P_ZOMBIE;
 		current->p_exit_status = current->p_registers.reg_eax;
+		proc_array[current->p_waiting_pid].p_status = P_RUNNABLE; // parent process is now unblocked
 		schedule();
 
 	case INT_SYS_WAIT: {
@@ -188,8 +189,18 @@ interrupt(registers_t *reg)
 			current->p_registers.reg_eax = -1;
 		else if (proc_array[p].p_state == P_ZOMBIE)
 			current->p_registers.reg_eax = proc_array[p].p_exit_status;
-		else
-			current->p_registers.reg_eax = WAIT_TRYAGAIN;
+		else {
+		/* FIXME
+		   add calling process (current) to "wait queue" 
+		   
+		   change current->p_status to blocked.
+		   
+		   */
+		   current->p_status = P_BLOCKED;
+		   proc_array[p]->p_waiting_pid = current->p_pid;
+		   
+		//	current->p_registers.reg_eax = WAIT_TRYAGAIN;
+		}
 		schedule();
 	}
 
