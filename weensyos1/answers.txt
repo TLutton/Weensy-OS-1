@@ -7,13 +7,18 @@ Collaborators:
 
 Response to Exercise 1:
 
-Yes. It should still work because schedule context switches and searches for a 
-runnable program to run.  If another program is run before the current 
-application, its registers will be saved and will still be able to execute 
-when the context is switched back to it. 
+No. It might not work correctly because it is possible for the eax
+register to be overwritten which would cause an error. 
 
-Anything else you'd like us to know:
+Response to Exercise 3:
 
+In order to achieve a blocked implementation, I changed the parent process'
+state to P_BLOCKED which means that when schedule() is called, it won't
+choose this process to run.  I then gave the child process a new data 
+member that holds the process id of the process that is waiting on it.
+When the child process finishes in INT_SYS_EXIT, I change the parent's
+state back to P_RUNNABLE and put the child process' exit state into
+the parent's eax register.
 
 
 Extra credit exercises:
